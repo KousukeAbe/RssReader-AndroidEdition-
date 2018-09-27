@@ -1,0 +1,2 @@
+# RssReader-AndroidEdition-
+ふいいどりいだあ　をスマートフォンアプリで！
