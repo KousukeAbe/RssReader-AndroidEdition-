@@ -1,30 +1,47 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  StatusBar
+} from 'react-native';
+import Drawer from 'react-native-drawer'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import Header from './src/organisms/header';
+import Toolbar from './src/organisms/toolbar';
 
 type Props = {};
 export default class App extends Component<Props> {
+
+  closeControlPanel = () => {
+    this._drawer.close()
+  };
+  openControlPanel = () => {
+    this._drawer.open()
+  };
+
   render() {
     return (
+      <Drawer
+        type="overlay"
+        content={<Header />}
+        tapToClose={true}
+        openDrawerOffset={0.2} // 20% gap on the right side of drawer
+        panCloseMask={0.2}
+        closedDrawerOffset={-3}
+        styles={drawerStyles}
+        ref={(ref) => this._drawer = ref}
+        tweenHandler={(ratio) => ({
+        main: { opacity:(2-ratio)/2 }
+      })}
+       >
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <StatusBar backgroundColor={"#006E60"} />
+        <Header openControlPanel={this.openControlPanel}/>
+        <Toolbar />
       </View>
+      </Drawer>
     );
   }
 }
@@ -32,18 +49,10 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
+
+const drawerStyles = {
+  drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
+  main: {paddingLeft: 3},
+};
