@@ -8,13 +8,50 @@ import {
   ScrollView
 } from 'react-native';
 
-import ScrollableTabView, {DefaultTabBar, } from 'react-native-scrollable-tab-view';
+import Content from './ContentPage';
+
+
+import ScrollableTabView, {ScrollableTabBar, } from 'react-native-scrollable-tab-view';
 
 export default class toolbar extends Component {
   constructor(props){
     super(props);
     this.ref = {};
+    this.state = { showText: ["uho", "uhi", "uhu", "uho"], data:[], topicListViews:[<Text tabLabel={"fd"}>fs</Text>]}
+
   }
+
+  componentWillMount() {
+  this._fetch();
+  }
+
+  _fetch = () => {
+  fetch('https://akgalaxy-rss-reader.herokuapp.com/GetRSSList')
+    .then((response) => response.json())
+    .then((responseJson) => {
+      let data = [];
+      let topicListViews = [];
+      for(let i = 0; i < responseJson.length; i++){
+        data.push({
+          key:i,
+          title:responseJson[i][0],
+          url:responseJson[i][1]
+        });
+        topicListViews.push(
+          <Content
+               tabLabel={responseJson[i][0]}
+            />
+        );
+      }
+      console.log(topicListViews);
+     this.setState({data: data});
+               this.setState({topicListViews: topicListViews});
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
 
   _onPress = () => {
     //refはそこコンポーネントに関する情報を取得することが出来る.HTMLのIDに似ている
@@ -30,6 +67,7 @@ export default class toolbar extends Component {
     //   onPress,
     // } = this.props;
 
+    console.log(this.state.topicListViews);
     return (
       <ScrollableTabView
         initialPage={0}
@@ -37,11 +75,9 @@ export default class toolbar extends Component {
         tabBarBackgroundColor={"#008d7d"}
         tabBarInactiveTextColor={"white"}
         tabBarActiveTextColor={"white"}
-        renderTabBar={() => <DefaultTabBar />}
+        renderTabBar={() => <ScrollableTabBar />}
       >
-        <Text tabLabel='Tab #1'>My</Text>
-        <Text tabLabel='Tab #2'>favorite</Text>
-        <Text tabLabel='Tab #3'>project</Text>
+      {this.state.topicListViews}
       </ScrollableTabView>
     );
   }
