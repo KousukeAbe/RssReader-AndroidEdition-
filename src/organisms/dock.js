@@ -29,13 +29,15 @@ export default class header extends Component {
         key: i,
         title:nextProps.pro[i].title,
         url:nextProps.pro[i].url,
-        ondone:this.props.ondone
+        ondone:this.props.ondone,
+        position:i,
+        remove:this.props.remove
       });
     }
     this.setState({data: data});
   }
 
-  render() {
+  render() {    
     return (
       <View style={styles.container}>
         <View>
@@ -56,7 +58,7 @@ export default class header extends Component {
           />
           <Text style={styles.tit}>ふいいど ついか</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.panel} onPress={() => this.props.onremove("f")}>
+        <TouchableOpacity style={styles.panel} onPress={() => this.props.onremove(this.state.data)}>
           <Image
             style={styles.image}
             source={require('./dust.png')}

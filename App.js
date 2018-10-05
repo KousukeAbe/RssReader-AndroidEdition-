@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import Drawer from 'react-native-drawer';
 import { createStackNavigator } from 'react-navigation';
+import { StackActions } from 'react-navigation';
+
 
 import Header from './src/organisms/header';
 import Toolbar from './src/organisms/toolbar';
@@ -26,6 +28,22 @@ class App extends Component<Props> {
     this.state = {data:[]}
     this._fetch();
 
+  }
+
+  onremove = (index) => {
+    const data = [].concat(this.state.data);
+    data.splice(index, 1);
+
+    this.setState({
+      data
+    });
+
+    const popAction = StackActions.pop({
+      n: 1,
+    });
+
+    this.props.navigation.dispatch(popAction);
+    this.closeControlPanel();
   }
 
   closeControlPanel = () => {
@@ -61,8 +79,9 @@ class App extends Component<Props> {
         type="overlay"
         content={<Dock pro={this.state.data}
                 ondone={(item)=>this.props.navigation.navigate('Detail', {url: item})}
-                onadd={()=>this.props.navigation.navigate('Add', {})}
-                onremove={()=>this.props.navigation.navigate('Remove', {})}
+                onadd={(item)=>this.props.navigation.navigate('Add', {data:item})}
+                onremove={(item)=>this.props.navigation.navigate('Remove', {data:item})}
+                remove={(item)=>this.onremove(item)}
                 />}
         tapToClose={true}
         openDrawerOffset={0.2} // 20% gap on the right side of drawer

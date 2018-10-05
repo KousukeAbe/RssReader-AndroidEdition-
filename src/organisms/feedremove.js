@@ -3,26 +3,14 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  WebView,
+  FlatList,
   Dimensions,
   Text
 } from 'react-native';
 
-const deviceWidth = Dimensions.get('screen').width;
-const deviceHeight = Dimensions.get('screen').height;
+let { width, height, scale } = Dimensions.get('window');
+import List from './../components/removelist';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  video: {
-    flex: 1,
-    width: deviceWidth,
-    height: deviceHeight,
-  }
-});
 
 export default class feedremove extends Component {
   constructor(props){
@@ -36,8 +24,20 @@ export default class feedremove extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>remove</Text>
+      <FlatList
+        style={styles.todoList}
+        data={this.props.navigation.state.params.data}
+        renderItem={({item}) => <List {...item}/>}
+      />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  //flexDirection... 配置の位置の設定。横か縦か
+  container:{
+    backgroundColor:"white",
+    flex:1
+  },
+});
