@@ -10,14 +10,16 @@ import Dimensions from 'Dimensions';
 let { width, height, scale } = Dimensions.get('window');
 
 const Page = (props) => {
+  console.log( props.image);
     let uhp = new Date(props.date);
-    let pass = props.image.match(/(http(s)?:\/\/[a-zA-Z0-9-.!'()*;/?:@&=+$,%#_]+)/gi);
+    let pass = typeof props.image == "object" ? null : props.image.match(/(?:jpg|gif|png)/gi);
+    console.log(pass);
     let url = {url: props.url, title: props.title}
     return (
         <TouchableOpacity style={styles.panel} onPress={() => props.ondone(url)}>
           <Image
             style={styles.image}
-            source={{uri: pass[0]}}
+            source={{uri:pass == null ? "http://eventsnews.info/wp-content/uploads/2015/12/gazou03318.jpg" : props.image}}
           />
           <Text style={styles.title}>{props.title}</Text>
           <Text style={styles.date}>{uhp.getFullYear()}年{uhp.getMonth() + 1}月{uhp.getDate() + 1}日 {uhp.getHours()}:{uhp.getMinutes() < 10 ? "0" + uhp.getMinutes() : uhp.getMinutes()}</Text>

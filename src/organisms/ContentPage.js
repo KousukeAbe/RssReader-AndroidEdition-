@@ -27,15 +27,17 @@ export default class header extends Component {
       let data = [];
       let topicListViews = [];
       for(let i = 0; i < responseJson[0].length; i++){
+        console.log(responseJson[0][i]);
         data.push({
           key:responseJson[0][i].day,
           title:responseJson[0][i].title,
           url:responseJson[0][i].link,
           date:responseJson[0][i].day,
-          image:responseJson[0][i].image ? responseJson[0][i].image[0]: "http://eventsnews.info/wp-content/uploads/2015/12/gazou03318.jpg",
+          image:responseJson[0][i].image ? responseJson[0][i].image: "http://eventsnews.info/wp-content/uploads/2015/12/gazou03318.jpg",
           ondone:this.props.ondone
         });
       }
+      console.log(data);
       this.setState({data: data});
     })
     .catch((error) => {
